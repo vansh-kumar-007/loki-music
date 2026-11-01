@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-11-01
 
-**Status:** Phase 0 audit, requirements inventory, provider feasibility, and architecture documentation are complete. The owner requested a review of the Phase 0 finalization report before the next phase begins. Phase 1 has not started.
+**Status:** Phase 0 is finalized. Phase 1 UI foundation is implemented and verified; account, playback, Last.fm, room, and backend services are not connected. Phase 2 has not started.
 
 ## Repository and environment
 
@@ -14,8 +14,9 @@
 
 ## Product status
 
-- The repository currently contains documentation and the MIT license only. It is not a runnable application.
-- No dependencies were installed; no scaffold, application code, UI, tests, migrations, or provider integration were created.
+- The repository now contains a runnable Next.js App Router application with TypeScript, Tailwind CSS, Motion for React, Lucide, Zustand, and Playwright browser checks.
+- The Phase 1 UI includes the landing page, responsive application shell/navigation, dashboard and player/queue preview, discovery and local sample search, library/history, room/account/profile, friend/activity, and settings/integration screens.
+- All catalog content is fictional sample data. Authentication, playback, Last.fm, synchronized rooms, backend persistence, and provider integration are not implemented and are not represented as working.
 - The original product requirements and eight-phase roadmap are inventoried in [Product requirements](PRODUCT_REQUIREMENTS.md). Proposed first-release scope and provisional defaults are in [Product scope](PRODUCT_SCOPE.md).
 - The approved direction is Next.js App Router/TypeScript, the planned frontend libraries, Supabase Auth/PostgreSQL, server-authoritative room commands, authorized Supabase Realtime, Last.fm separate from playback, and a modular playback-provider boundary.
 
@@ -25,7 +26,7 @@
 - **Architecture:** the proposed system/data/security design is documented in [Architecture](ARCHITECTURE.md), with decisions recorded in [ADRs](DECISIONS.md).
 - **Product defaults:** private rooms/profiles, opt-in activity, authenticated members, guest access off, 10-person initial room cap, and related provisional defaults are documented with reasoning in [Product scope](PRODUCT_SCOPE.md). They are recommendations, not implemented behavior.
 - **Synchronization targets:** provisional and unverified until a provider-approved technical spike.
-- **Next step:** wait for the owner's review of the Phase 0 finalization report. Do not begin Phase 1, install dependencies, scaffold the application, or create application code during this closeout.
+- **Next step:** await owner authorization before Phase 2 authentication work. Phase 1 implementation and verification are complete.
 
 ## Known limitations and manual prerequisites
 
@@ -34,3 +35,12 @@
 - A provider decision and successful playback spike are prerequisites for Phase 3 playback integration and real room-synchronization acceptance. They are not being treated as resolved by this documentation work.
 - Supabase project, Last.fm developer account, and any approved provider credentials are not configured. Create these only when the corresponding phase is authorized; never commit credentials.
 - The provider comparison is an engineering/product assessment, not a legal opinion.
+
+## Phase 1 verification
+
+- `npm run lint`: passed.
+- `npm run typecheck`: passed.
+- `npm run test:e2e`: 11 passed, one desktop-only skip across desktop and mobile Chromium projects; responsive viewport checks covered 1440px, 820px, and 390px.
+- `npm run build`: passed; all 17 application routes were generated or server-rendered successfully.
+- Production smoke test: all 16 product routes returned HTTP 200; the production dashboard at 390px had no horizontal overflow.
+- The landing page and dashboard were visually inspected at desktop, tablet, and mobile sizes with no horizontal overflow.

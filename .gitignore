@@ -1,0 +1,29 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+
+# production
+/build
+
+# local environment
+.env*
+!.env.example
+
+# tooling
+.turbo/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+next-env.d.ts
+
+# operating systems and editors
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
