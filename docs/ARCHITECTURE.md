@@ -1,6 +1,6 @@
 # System Architecture
 
-**Status:** Phase 0 review draft. The owner approved the general Next.js/Supabase direction; provider selection, detailed scope, privacy defaults, and acceptance targets remain open.
+**Status:** Phase 0 architecture baseline. The owner approved the general Next.js/Supabase direction. Provider selection remains unresolved; product defaults and sync targets are recommendations documented in [Product scope](PRODUCT_SCOPE.md), not implemented behavior.
 
 ## System shape
 
@@ -46,7 +46,7 @@ The diagram shows the proposed boundaries, not an existing implementation. A sel
 
 ## Server-authoritative room playback
 
-Persist one playback-state row per room with fields equivalent to:
+Persist one intended playback-state row per room with fields equivalent to:
 
 - room ID and monotonic revision/version;
 - provider key and provider track ID;
@@ -55,9 +55,11 @@ Persist one playback-state row per room with fields equivalent to:
 - current controller and update timestamp;
 - repeat/shuffle modes only when supported by the provider.
 
-The server does not stream the audio. A controller command is authenticated, authorized against current membership/role, validated against provider capabilities, and committed atomically. The update includes an idempotency or revision check so a stale/retried command cannot silently overwrite newer state. After commit, Realtime distributes the new state/event. Clients estimate position from the server timestamp, compare it with actual provider state, and correct drift only where provider policy and controls allow it.
+The server does not stream the audio. A controller command is authenticated, authorized against current membership/role, validated against provider capabilities, and committed atomically. The update includes an idempotency or revision check so a stale/retried command cannot silently overwrite newer state. After commit, Realtime distributes the new intended state/event. Clients estimate position from the server timestamp, compare it with the actual local provider state, and correct drift only where provider policy and controls allow it.
 
-Use Realtime for room state changes, chat notifications, and presence. PostgreSQL is the recoverable source of truth. A reconnecting client fetches the current room snapshot before applying later events. Broadcast payloads contain only data authorized for the channel; do not treat broadcast authorization as playback-command authorization.
+This row is authoritative for LOKI's accepted room command and target timeline; it is not proof that audio is actually playing on each device. Track each member's local playback/availability status separately (prefer ephemeral private presence unless a persistent record is required and consented to). Never show a participant as synchronized solely because a database update or Realtime event succeeded. Report autoplay rejection, entitlement/region errors, buffering, and local player mismatch honestly.
+
+Use Realtime for room state changes, chat notifications, and presence. PostgreSQL is the recoverable source of truth. A reconnecting client fetches the current room snapshot before applying later events. Broadcast payloads contain only data authorized for the channel; do not treat broadcast authorization as playback-command authorization. Follow the privacy defaults and access scopes proposed in [Product scope](PRODUCT_SCOPE.md).
 
 ## Initial database model
 
@@ -121,4 +123,4 @@ Represent provider errors, missing local entitlement, region unavailability, exp
 
 ## Dependencies
 
-Identity and membership precede private room access. Provider selection and a successful playback spike precede room synchronization acceptance. Room state and membership precede DJ control and shared queue; identity/privacy precede social presence and notifications. Security and access tests are cross-cutting from the first migration onward.
+Identity and membership precede private room access. Provider selection, written licensing clarification where needed, and a successful playback spike precede playback integration and room synchronization acceptance. Room state and membership precede DJ control and shared queue; identity/privacy precede social presence and notifications. Security and access tests are cross-cutting from the first migration onward. The complete planned routes and features remain listed in [Product requirements](PRODUCT_REQUIREMENTS.md).

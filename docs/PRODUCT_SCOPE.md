@@ -1,6 +1,6 @@
 # First-Release Scope and Acceptance Criteria
 
-**Status:** Proposed scope for owner approval. This stages the plan's requirements; deferred items are not removed from the product roadmap.
+**Status:** Proposed first-release slice. Defaults below are recommended and provisional. This stages the plan's requirements; deferred items are not removed from the product roadmap. The complete requirement inventory is in [Product requirements](PRODUCT_REQUIREMENTS.md).
 
 ## First-release goal
 
@@ -22,7 +22,26 @@ The playback-provider approval gate is a prerequisite. If the selected provider 
 
 ## Proposed later increments (deferred, not removed)
 
-Full friend-request/activity network, extensive profile statistics, advanced recommendations and genre sections, dynamic artwork-derived ambience, waveform/audio visualizer, lyrics provider, output-device selection, advanced notifications, and additional playback providers. The roadmap's eight phases remain intact.
+Full friend-request/activity network, extensive profile statistics, advanced recommendations and genre sections, dynamic artwork-derived ambience, waveform/audio visualizer, lyrics provider, output-device selection, advanced notifications, queue voting, democratic skip voting, and additional playback providers. The roadmap's eight phases remain intact; see [Product requirements](PRODUCT_REQUIREMENTS.md) for the complete planned feature inventory.
+
+## Recommended provisional defaults
+
+These are privacy- and operations-conscious starting values, not final product commitments. They can be adjusted through owner-configurable settings after the first real-provider and multi-session tests.
+
+| Area | Recommended default | Reason |
+|---|---|---|
+| Room visibility | Private; public discovery is an explicit owner choice | Avoid exposing room activity by accident. |
+| Authentication and guests | Authenticated members only; guest access off | Simplifies account, role, and abuse controls. |
+| Initial room size | 10 participants total, including the owner; revisit after load and provider tests | Keeps initial presence and synchronization verification bounded. |
+| Invitations | High-entropy, hashed, revocable links that expire after 7 days | Limits harm from a leaked invitation while allowing normal sharing. |
+| Control requests | Owner approval required; 30-second per-user request cooldown | Makes authority and request volume predictable. |
+| Queue changes | Owner/controller can edit; listeners may suggest tracks; voting remains deferred | Preserves collaborative input without introducing race/vote rules in the first slice. |
+| Profile visibility | Private by default; friends/public visibility requires an explicit user choice | Prevents accidental publication of identity and listening activity. |
+| Presence/activity | Presence visible only to authorized room members; global friend activity opt-in | Limits exposure of online and listening behavior. |
+| Last.fm | Linking and scrobbling are explicit opt-ins; linking alone does not publish profile/history in LOKI | Separates account authorization from visibility and sharing consent. |
+| Room chat retention | Recommend 30 days, with clear disclosure; review deletion/report needs before migration | Minimizes retained personal data while leaving a short moderation window. This period is provisional. |
+
+Do not persist a separate cross-room listening history by default. If history/statistics are enabled later, make collection, visibility, retention, export, and deletion explicit. Reports and security audit records need a separate narrow retention policy before implementation.
 
 ## Acceptance criteria
 
@@ -38,6 +57,9 @@ Full friend-request/activity network, extensive profile statistics, advanced rec
 - Credentials never appear in browser bundles, logs, docs, screenshots, or Git history. Disconnect/delete paths remove or revoke stored provider data according to the documented retention policy.
 - Keyboard, screen-reader, reduced-motion, mobile, loading, empty, and error states meet documented accessibility and UX checks.
 - Documentation lets a new developer run the application without committing secrets; the build, type checks, automated tests, migration checks, and browser flows pass before release.
+- Room creation enforces the approved visibility, guest, participant-cap, invitation-expiry, control-request, and queue defaults server-side; owner settings cannot bypass provider or platform limits.
+- Public profiles, friend activity, and Last.fm-derived information remain private until the user opts into the relevant visibility.
+- Chat retention, account deletion, provider disconnection, reports, and any retained moderation records follow a disclosed policy verified by deletion tests.
 
 ## Release gates
 

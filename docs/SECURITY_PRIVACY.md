@@ -28,6 +28,7 @@ LOKI will hold identity, linked-account tokens, private room invitations, social
 - Make membership/role changes and control commands transactional. Recheck the active membership and role in the server/database at mutation time; do not trust frontend state.
 - Keep queue and playback mutations behind validated server operations. Apply idempotency/revision checks to prevent retries or stale state from winning.
 - Use private Realtime topics with membership-based authorization; revoke access when a user leaves, is removed, blocked, or loses a role.
+- Treat provider URLs and any future user-provided media URL as untrusted input. Prefer loading media directly through the approved provider/player. If a server ever dereferences a URL, allowlist schemes/hosts, reject private/link-local/loopback destinations, revalidate every redirect and resolved address, and enforce size/time limits to prevent SSRF.
 
 ## Database and RLS
 
@@ -51,6 +52,7 @@ LOKI will hold identity, linked-account tokens, private room invitations, social
 - Keep public profile projection separate from private account and integration data.
 - Respect blocking in invitations, profile views, chat, presence, and friend suggestions.
 - Document what is sent to Last.fm and the selected playback provider; provide disconnect controls and data deletion/export guidance as scope requires.
+- Use the provisional privacy defaults in [Product scope](PRODUCT_SCOPE.md): private rooms/profiles by default, explicit opt-in for public/friend activity, and room-member-only presence. Final retention behavior must be disclosed and tested before migrations.
 
 ## Rights and media
 

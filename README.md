@@ -2,44 +2,45 @@
 
 **Music is better when shared.**
 
-LOKI is planned as an open-source collaborative listening platform. Its goal is to let people discover music, create listening rooms, and share a genuinely synchronized session through playback sources that permit this use.
+LOKI is planned as an open-source collaborative music-listening platform. It combines Last.fm metadata and scrobbling with a separately licensed playback source, listening rooms, synchronized playback where the provider permits it, and social features.
 
 ## Project status
 
-LOKI is in **Phase 0: research and architecture review**. This repository currently has no runnable application. No playback provider has been selected, and no application code or dependencies have been added.
+Phase 0 architecture and provider-feasibility documentation is recorded in [PR #1](https://github.com/vansh-kumar-007/loki-music/pull/1). The repository is documentation-only: no application code, dependencies, or provider integration exists. **No playback provider has been selected.** Jamendo is a candidate for further investigation, but its room-use and licensing fit remains unresolved.
 
-The playback-provider comparison and open questions are in [Provider feasibility](docs/PROVIDER_FEASIBILITY.md). The system design, data model, and authorization approach are in [Architecture](docs/ARCHITECTURE.md). These documents are prepared for review; provider choice and implementation remain subject to approval.
+Do not treat the product roadmap or visual plans as implemented functionality. LOKI will not fake playback, synchronization, authentication, presence, or provider integrations.
 
-## Planned product
+## Product and roadmap
 
-The roadmap includes Last.fm metadata and scrobbling, a separate lawful playback-provider integration, private and public listening rooms, synchronized playback, owner and DJ controls, a shared queue, room chat, profiles, discovery, and social features. The product must clearly distinguish metadata from playback and must not present simulated playback or synchronization as real.
+The complete plan inventory, including routes, interface requirements, integrations, security requirements, and all eight development phases, is in [Product requirements](docs/PRODUCT_REQUIREMENTS.md). The proposed first-release slice, provisional defaults, and acceptance criteria are in [Product scope](docs/PRODUCT_SCOPE.md).
 
-The planned visual direction is a cinematic dark emerald interface. LOKI will use original design elements and properly licensed artwork rather than copied logos or assets.
-
-## Planned technology baseline
+## Approved architectural direction
 
 - Next.js App Router and TypeScript
 - Tailwind CSS, Framer Motion, and Lucide
-- Zustand for interface state and TanStack Query for server data where appropriate
-- Supabase Auth, PostgreSQL, and authorized Realtime channels
-- Vercel-compatible deployment
+- Zustand for transient interface state and TanStack Query for server data where useful
+- Supabase Auth, PostgreSQL, and authorized Supabase Realtime
+- Last.fm as a metadata and scrobbling integration, separate from playback
+- A modular playback-provider boundary; provider selection remains unresolved
+- Vercel-compatible frontend deployment with documented self-hosting
 
-These choices are the approved architectural direction. The playback provider remains undecided.
+The design direction is a cinematic dark emerald interface with original visual assets. Do not copy protected product interfaces, logos, or artwork.
 
 ## Documentation
 
-- [Current project state](docs/PROJECT_STATE.md)
-- [Build checklist](docs/BUILD_CHECKLIST.md)
-- [System architecture](docs/ARCHITECTURE.md)
-- [Architecture decisions](docs/DECISIONS.md)
-- [Playback provider feasibility](docs/PROVIDER_FEASIBILITY.md)
-- [First-release scope and acceptance criteria](docs/PRODUCT_SCOPE.md)
+- [Product requirements and eight-phase roadmap](docs/PRODUCT_REQUIREMENTS.md)
+- [Product scope and acceptance criteria](docs/PRODUCT_SCOPE.md)
+- [Playback-provider feasibility](docs/PROVIDER_FEASIBILITY.md)
+- [System architecture and data model](docs/ARCHITECTURE.md)
 - [Security and privacy boundaries](docs/SECURITY_PRIVACY.md)
-- [Repository foundation plan](docs/REPOSITORY_FOUNDATION.md)
+- [Architecture decisions](docs/DECISIONS.md)
+- [Repository foundation and Git workflow](docs/REPOSITORY_FOUNDATION.md)
+- [Build checklist](docs/BUILD_CHECKLIST.md)
+- [Project state](docs/PROJECT_STATE.md)
 
 ## Development
 
-There are no application setup or run instructions yet because the application has not been scaffolded. Follow the checklist and wait for approval of the Phase 0 findings before implementation.
+There are no install or run instructions because the application has not been scaffolded. Phase 1 has not started. Check the build checklist and project state before beginning approved work.
 
 ## License
 

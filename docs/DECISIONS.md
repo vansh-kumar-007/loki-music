@@ -1,6 +1,6 @@
 # Architecture Decisions
 
-These records capture the owner's approved architectural direction and the remaining Phase 0 decisions. They do not authorize application implementation. Playback-provider selection is expressly pending.
+These records capture the owner's approved architectural direction, Phase 0 recommendations, and unresolved provider gate. They do not authorize Phase 1 implementation; the owner asked to review the Phase 0 finalization report before the next phase begins. Playback-provider selection is expressly unresolved.
 
 ## ADR-001 — Use the Next.js App Router as the web application boundary
 
@@ -30,19 +30,25 @@ These records capture the owner's approved architectural direction and the remai
 
 ## ADR-005 — Keep a modular playback-provider boundary; provider choice is pending
 
-**Status:** Open; owner approval required.
-**Decision:** Do not select or integrate a provider until the owner reviews `PROVIDER_FEASIBILITY.md`. The adapter must report supported capabilities and access requirements so the product only enables permitted controls.
-**Reasoning:** Providers differ in player SDKs, subscription gates, geography, legal restrictions, and room-synchronization feasibility. Spotify, SoundCloud, and TIDAL have published restrictions that conflict with or create substantial uncertainty for the LOKI room model. Apple MusicKit needs written clarification; YouTube requires a visible, unmodified player; Jamendo has a smaller catalog and track-specific Creative Commons terms.
+**Status:** Unresolved; Jamendo is only the lead candidate for further diligence.
+**Decision:** Select and integrate no provider until its current terms, supported playback model, account/market requirements, and synchronization rights are confirmed and the owner approves the provider. Keep the adapter capability-aware.
+**Reasoning:** Providers differ in player SDKs, subscriptions, geography, quotas, and legal restrictions. The current comparison is in `PROVIDER_FEASIBILITY.md`. Jamendo's API terms allow non-commercial API use and expose track-level Creative Commons metadata, but its published terms page says it was last modified in 2013 and does not expressly resolve LOKI's simultaneous room use. Written confirmation is required. Spotify, SoundCloud, and TIDAL have direct published conflicts; Apple MusicKit needs terms clarification; YouTube requires a visible embedded player.
 
-## ADR-006 — Phase 0 is documentation and investigation only
+## ADR-006 — Phase 0 finalization must precede Phase 1
 
 **Status:** Approved.
-**Decision:** Do not install dependencies, scaffold the app, create application code, or begin Phase 1 until the Phase 0 findings and architecture decisions have been presented and approved.
-**Reasoning:** This is the owner's explicit development boundary. Planning documents may be reviewed as Phase 0 deliverables; code follows only after the exit gate.
+**Decision:** Phase 0 consists of the audit, provider comparison, complete requirements inventory, architecture/security decisions, provisional product defaults, and documentation cleanup. Do not install dependencies, scaffold the app, create application code, or begin Phase 1 until the owner reviews the Phase 0 finalization report.
+**Reasoning:** This is the owner's explicit boundary. Phase 0 may document an unresolved provider; that unresolved legal gate blocks playback integration and real room-sync acceptance, not completion of the documentation review itself.
 
-## Open decisions
+## ADR-007 — Use privacy-conscious defaults for initial rooms and profiles
 
-- Playback provider and the written permissions/clarifications needed for shared listening.
-- MVP privacy defaults and room/participant limits.
-- Acceptance targets for command latency, initial playback skew, and steady-state drift after the provider spike.
-- How provider-specific track identity and scrobble attribution are represented across the supported sources.
+**Status:** Recommended and provisional; not implemented.
+**Decision:** Start rooms private, require authentication, disable guests by default, cap initial rooms at 10 participants, require owner approval for control requests, limit request frequency, and allow public profile/friend activity only by explicit opt-in. Presence is visible only to authorized room members. See `PRODUCT_SCOPE.md` for proposed invitation, queue, and data-retention defaults.
+**Reasoning:** These defaults reduce accidental exposure and keep initial abuse and Realtime behavior bounded. Revisit capacity and controls after real provider and multi-session tests. No default overrides provider rules or user consent.
+
+## Open decisions and prerequisites
+
+- **Provider and legal feasibility:** unresolved. Obtain Jamendo's written response to the questions in `PROVIDER_FEASIBILITY.md` or continue evaluating alternatives; do not select/integrate it by default.
+- **Room/profile defaults:** recommendations are in `PRODUCT_SCOPE.md`; treat them as provisional product defaults unless review identifies a material concern.
+- **Synchronization acceptance:** 95% start within 2 seconds and drift below 1.5 seconds within 10 seconds are provisional measurement targets, subject to a real provider spike and browser/network evidence.
+- **Provider-specific identity/scrobble mapping:** decide once a provider is approved; keep source IDs and `chosenByUser` attribution distinct.
