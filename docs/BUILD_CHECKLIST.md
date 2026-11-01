@@ -50,4 +50,5 @@ Until these items are approved, do not install dependencies, scaffold the applic
 - Initial audit: temporary workspace write/read/delete check passed; final working tree was clean.
 - Initial Git check: origin/main matched local HEAD; local Git push dry-run reported up to date.
 - No application tests or build were run because no application or test configuration exists.
-- Phase 0 document review and Git diff checks are to be recorded before committing this documentation branch.
+- `git diff --cached --check` passed before commit. Documentation-only commit `9723f86` was pushed to `origin/codex/phase-0-investigation`; local and remote branch heads match.
+- Draft pull request [#1](https://github.com/vansh-kumar-007/loki-music/pull/1) is open against `main` for owner review; it has not been merged.

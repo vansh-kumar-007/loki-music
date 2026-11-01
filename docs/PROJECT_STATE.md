@@ -7,6 +7,7 @@
 
 - Canonical checkout: `D:\Projects\LOKI\loki-music`
 - Working branch: `codex/phase-0-investigation`
+- Phase 0 documentation commit: `9723f86` (`docs: document Phase 0 architecture and provider research`), pushed to the matching origin branch; draft [PR #1](https://github.com/vansh-kumar-007/loki-music/pull/1) is open for review.
 - Starting point: `96763b4416d06cb6aaad10caa3af6ac3fe9c3696` (`Initial commit`)
 - Repository baseline: one tracked MIT license; no app, package manifest, tests, migrations, CI, or setup docs existed at audit time.
 - Local environment audit: Node.js 24.16.0, npm 11.13.0, pnpm 11.17.0, Corepack 0.35.0, Git 2.54.0, Python 3.14.5. Global TypeScript, Yarn, Bun, Deno, and GitHub CLI were not found.
