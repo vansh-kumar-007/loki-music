@@ -18,13 +18,16 @@ Status key: **Done** = completed and verified/documented; **Pending** = not star
 
 - Phase 0 documentation and investigation are complete. The provider decision remains **unresolved by design**; Jamendo is a due-diligence candidate only.
 - Written provider clarification and owner approval are required before playback integration or real synchronized-room acceptance. This does not silently select a provider.
-- [ ] Owner review of the Phase 0 finalization report before any next phase.
+- [x] Owner reviewed the Phase 0 finalization report and authorized Phase 1 implementation.
 
-## Phase 1 — UI Foundation (not started)
+## Phase 1 — UI Foundation (complete)
 
-- [ ] Project setup and theme.
-- [ ] Sidebar, dashboard, responsive layout, player interface, and landing page.
-- [ ] Use only clearly labeled sample data during this initial UI phase; do not imply that sample playback or synchronization is real.
+- [x] Set up the Next.js App Router, TypeScript, Tailwind CSS, Motion, Lucide, Zustand, linting, and browser-test tooling.
+- [x] Build the dark emerald design system, cinematic landing page, shared application shell, collapsible sidebar, mobile navigation, and persistent capability-aware player/queue preview.
+- [x] Implement dashboard, discovery, local sample search, library/history, room, friend/activity, settings/integrations, profile, and honest account/room preview states.
+- [x] Keep sample metadata clearly labeled and disable playback, authentication, account linking, and room mutations until their real services are implemented.
+- [x] Add loading, empty, error, keyboard, focus, and reduced-motion states; verify desktop, tablet, and mobile widths.
+- [x] Verify lint, TypeScript, production build, and browser flows; see the verification record below.
 
 ## Phase 2 — Authentication (not started)
 
@@ -57,10 +60,10 @@ Status key: **Done** = completed and verified/documented; **Pending** = not star
 
 ## Manual owner actions
 
-- Review the Phase 0 finalization report before the next phase.
 - Before playback integration, choose a provider only after reviewing current terms and obtaining any needed written clarification. For Jamendo, the open questions are listed in [Provider feasibility](PROVIDER_FEASIBILITY.md); no message has been sent on the owner's behalf.
 - Provide/create Last.fm, Supabase, and approved-provider accounts when corresponding integration work is authorized. Keep credentials outside Git.
 - Revisit provisional room capacity, sync targets, privacy defaults, and retention after provider and multi-session evidence; the documented defaults are the starting recommendation.
+- Review and authorize Phase 2 before authentication implementation begins.
 
 ## Verification record
 
@@ -68,3 +71,4 @@ Status key: **Done** = completed and verified/documented; **Pending** = not star
 - Local GitHub remote access and a no-write push dry run passed in the initial audit. Phase 0 changes were pushed through a feature branch, not directly to `main`.
 - Documentation whitespace checks passed. Application tests/builds were not run because the repository has no application or test configuration.
 - Final closeout checks and merge state are reported in the Phase 0 finalization report and the Git history; this checklist tracks phase work and gates, not a transient local branch name.
+- Phase 1: `npm run lint`, `npm run typecheck`, `npm run test:e2e` (11 passed, one desktop-only skip), and `npm run build` passed. The production server returned HTTP 200 for all 16 product routes. Browser checks covered desktop, tablet, mobile, local sample search, preview-only auth, queue open/close, and responsive navigation. The landing page and dashboard were visually inspected at 1440px, 820px, and 390px; all had no horizontal overflow.

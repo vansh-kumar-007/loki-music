@@ -1,0 +1,173 @@
+/* Original artwork */
+.artwork {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  isolation: isolate;
+  background: #13251a;
+}
+
+.artwork::before,
+.artwork::after,
+.artwork-halo,
+.artwork-orbit,
+.artwork-core,
+.artwork-grain {
+  position: absolute;
+  display: block;
+  content: "";
+  pointer-events: none;
+}
+
+.artwork--moss {
+  background: radial-gradient(circle at 37% 38%, #97a271 0, #586e46 16%, #253c2b 42%, #111b13 80%);
+}
+
+.artwork--moss::before {
+  inset: 12% 21% 19% 10%;
+  border-radius: 58% 42% 54% 46%;
+  background: linear-gradient(145deg, rgba(195, 203, 155, 0.76), rgba(81, 117, 75, 0.2) 57%, transparent);
+  filter: blur(1px);
+  transform: rotate(-24deg);
+}
+
+.artwork--moss::after {
+  top: 13%;
+  right: 8%;
+  width: 55%;
+  height: 75%;
+  border: 1px solid rgba(221, 229, 176, 0.48);
+  border-radius: 50%;
+  transform: rotate(41deg);
+}
+
+.artwork--dusk {
+  background: radial-gradient(circle at 68% 27%, #ce9a7b 0, #8a5e5c 16%, #3b354a 46%, #10131a 82%);
+}
+
+.artwork--dusk::before {
+  inset: 12% 17% 14% 23%;
+  border-radius: 48% 52% 64% 36%;
+  background: linear-gradient(160deg, rgba(235, 180, 138, 0.7), rgba(97, 100, 133, 0.08) 63%);
+  transform: rotate(24deg);
+}
+
+.artwork--dusk::after {
+  top: 21%;
+  left: 16%;
+  width: 68%;
+  height: 68%;
+  border: 1px solid rgba(255, 211, 177, 0.34);
+  border-radius: 50%;
+}
+
+.artwork--orbit {
+  background: radial-gradient(circle at 54% 48%, #739e84 0, #2c644d 20%, #1a3a35 48%, #101a1c 82%);
+}
+
+.artwork--orbit::before {
+  top: 18%;
+  left: 22%;
+  width: 58%;
+  height: 58%;
+  border: 1px solid rgba(187, 238, 201, 0.47);
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(90, 227, 145, 0.17), inset 0 0 25px rgba(105, 226, 151, 0.1);
+}
+
+.artwork--orbit::after {
+  top: 32%;
+  left: 18%;
+  width: 68%;
+  height: 35%;
+  border: 1px solid rgba(196, 243, 208, 0.34);
+  border-radius: 50%;
+  transform: rotate(-37deg);
+}
+
+.artwork--ember {
+  background: radial-gradient(circle at 57% 44%, #d59469 0, #995d48 18%, #473b36 46%, #171614 80%);
+}
+
+.artwork--ember::before {
+  top: 12%;
+  left: 24%;
+  width: 53%;
+  height: 76%;
+  border-radius: 49% 51% 61% 39%;
+  background: linear-gradient(170deg, rgba(236, 178, 124, 0.73), rgba(129, 70, 51, 0.1) 64%);
+  transform: rotate(-28deg);
+}
+
+.artwork--ember::after {
+  inset: 17%;
+  border: 1px solid rgba(244, 194, 152, 0.33);
+  border-radius: 48%;
+  transform: rotate(35deg);
+}
+
+.artwork--glass {
+  background: radial-gradient(circle at 43% 37%, #84aaa7 0, #416f6c 18%, #253e42 47%, #10181b 82%);
+}
+
+.artwork--glass::before {
+  top: 13%;
+  left: 18%;
+  width: 63%;
+  height: 70%;
+  border: 1px solid rgba(197, 234, 225, 0.48);
+  border-radius: 48% 52% 38% 62%;
+  background: linear-gradient(125deg, rgba(153, 209, 194, 0.29), transparent 62%);
+  transform: rotate(21deg);
+}
+
+.artwork--glass::after {
+  top: 27%;
+  left: 26%;
+  width: 43%;
+  height: 43%;
+  border: 1px solid rgba(209, 243, 230, 0.42);
+  border-radius: 48%;
+  transform: rotate(45deg);
+}
+
+.artwork-halo {
+  z-index: -1;
+  inset: -20%;
+  background: radial-gradient(circle, rgba(206, 255, 217, 0.16), transparent 52%);
+  mix-blend-mode: screen;
+}
+
+.artwork-orbit {
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 79%;
+  height: 34%;
+  border: 1px solid rgba(234, 255, 238, 0.22);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-43deg);
+}
+
+.artwork-core {
+  z-index: 2;
+  top: 45%;
+  left: 47%;
+  width: 13%;
+  height: 13%;
+  border: 1px solid rgba(232, 255, 239, 0.38);
+  border-radius: 50%;
+  background: rgba(226, 255, 234, 0.1);
+  box-shadow: 0 0 28px rgba(182, 255, 202, 0.22);
+  backdrop-filter: blur(4px);
+}
+
+.artwork-grain {
+  z-index: 3;
+  inset: 0;
+  background-image: radial-gradient(rgba(244, 255, 246, 0.45) 0.4px, transparent 0.6px);
+  background-size: 4px 4px;
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+}

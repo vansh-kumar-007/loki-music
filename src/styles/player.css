@@ -1,0 +1,254 @@
+/* Player, queue, mobile drawer */
+.player-dock {
+  position: fixed;
+  z-index: 40;
+  right: 18px;
+  bottom: 16px;
+  left: calc(var(--sidebar-width) + 18px);
+  display: grid;
+  min-height: 83px;
+  grid-template-columns: minmax(205px, 1fr) minmax(230px, 1fr) minmax(205px, 1fr);
+  align-items: center;
+  gap: 15px;
+  padding: 10px 15px;
+  border: 1px solid rgba(168, 218, 181, 0.2);
+  border-radius: 17px;
+  background: rgba(8, 19, 12, 0.91);
+  box-shadow: 0 21px 60px rgba(0, 0, 0, 0.49), inset 0 1px 0 rgba(231, 255, 237, 0.04);
+  backdrop-filter: blur(24px);
+  transition: left 220ms ease;
+}
+
+.app-frame:has(.sidebar--collapsed) .player-dock {
+  left: calc(var(--sidebar-collapsed) + 18px);
+}
+
+.player-track {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-artwork {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+}
+
+.player-track-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.player-track-copy strong {
+  overflow: hidden;
+  color: #dce9df;
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-track-copy span {
+  overflow: hidden;
+  color: #819486;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-sample-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 3px;
+  padding: 4px 6px;
+  border: 1px solid rgba(163, 203, 173, 0.1);
+  border-radius: 999px;
+  color: #809184;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.player-center {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.player-controls {
+  display: flex;
+  height: 31px;
+  align-items: center;
+  gap: 11px;
+}
+
+.player-control,
+.player-play {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #718477;
+}
+
+.player-control--minor {
+  color: #667a6c;
+}
+
+.player-play {
+  width: 31px;
+  height: 31px;
+  border: 1px solid rgba(160, 204, 171, 0.16);
+  border-radius: 50%;
+  background: rgba(225, 255, 232, 0.06);
+  color: #7c9282;
+}
+
+.player-controls button:disabled {
+  opacity: 0.53;
+}
+
+.player-progress {
+  display: flex;
+  width: min(100%, 330px);
+  align-items: center;
+  gap: 8px;
+  color: #687c6e;
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-progress-track {
+  height: 3px;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(175, 207, 181, 0.13);
+}
+
+.player-progress-track span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #54cf82;
+}
+
+.player-trailing {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #778b7d;
+}
+
+.player-volume input {
+  width: 70px;
+  height: 3px;
+  accent-color: #40c87b;
+}
+
+.queue-toggle {
+  display: inline-flex;
+  min-height: 35px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #819587;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.queue-toggle:hover,
+.queue-toggle--active {
+  border-color: rgba(137, 208, 153, 0.14);
+  background: rgba(220, 255, 229, 0.04);
+  color: #c1d7c7;
+}
+
+.queue-layer {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+}
+
+.queue-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: default;
+  backdrop-filter: blur(2px);
+}
+
+.queue-panel {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  bottom: 114px;
+  display: flex;
+  width: min(390px, calc(100vw - 36px));
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid rgba(171, 218, 182, 0.19);
+  border-radius: 18px;
+  background: rgba(8, 19, 12, 0.97);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.48);
+  animation: queue-enter 170ms ease both;
+}
+
+@keyframes queue-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.queue-panel-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 17px;
+}
+
+.queue-panel-heading h2 {
+  margin: 4px 0 0;
+  color: #e0ece3;
+  font-family: var(--display);
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.queue-panel > .empty-state {
+  flex: 1;
+}
+
+.mobile-sidebar-backdrop {
+  position: fixed;
+  z-index: 25;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.mobile-sidebar-backdrop[hidden] {
+  display: none;
+}

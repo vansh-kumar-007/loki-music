@@ -2,13 +2,13 @@
 
 **Music is better when shared.**
 
-LOKI is planned as an open-source collaborative music-listening platform. It combines Last.fm metadata and scrobbling with a separately licensed playback source, listening rooms, synchronized playback where the provider permits it, and social features.
+LOKI is an open-source collaborative music-listening platform in development. Its goal is to combine Last.fm metadata with a separately approved playback source, listening rooms, and social features.
 
 ## Project status
 
-Phase 0 architecture and provider-feasibility documentation is recorded in [PR #1](https://github.com/vansh-kumar-007/loki-music/pull/1). The repository is documentation-only: no application code, dependencies, or provider integration exists. **No playback provider has been selected.** Jamendo is a candidate for further investigation, but its room-use and licensing fit remains unresolved.
+**Phase 1 UI foundation is implemented and verified.** The runnable application is a responsive interface preview with clearly labeled fictional sample metadata. It has no authentication, music playback, live rooms, connected Last.fm account, or backend data. **No playback provider has been selected.** Jamendo remains a candidate for further investigation; its room-use and licensing fit is unresolved.
 
-Do not treat the product roadmap or visual plans as implemented functionality. LOKI will not fake playback, synchronization, authentication, presence, or provider integrations.
+Do not treat sample catalog items or preview screens as live functionality. LOKI does not fake playback, synchronization, authentication, presence, or provider integrations.
 
 ## Product and roadmap
 
@@ -17,8 +17,8 @@ The complete plan inventory, including routes, interface requirements, integrati
 ## Approved architectural direction
 
 - Next.js App Router and TypeScript
-- Tailwind CSS, Framer Motion, and Lucide
-- Zustand for transient interface state and TanStack Query for server data where useful
+- Tailwind CSS, Motion for React, and Lucide
+- Zustand for transient interface state; a server-data library will be added when real APIs exist
 - Supabase Auth, PostgreSQL, and authorized Supabase Realtime
 - Last.fm as a metadata and scrobbling integration, separate from playback
 - A modular playback-provider boundary; provider selection remains unresolved
@@ -38,9 +38,19 @@ The design direction is a cinematic dark emerald interface with original visual 
 - [Build checklist](docs/BUILD_CHECKLIST.md)
 - [Project state](docs/PROJECT_STATE.md)
 
-## Development
+## Run locally
 
-There are no install or run instructions because the application has not been scaffolded. Phase 1 has not started. Check the build checklist and project state before beginning approved work.
+Requirements: Node.js 20.9 or newer and npm. The Phase 1 interface does not require environment variables or external service credentials.
+
+Install dependencies with npm ci, then start the development server with npm run dev.
+
+Open http://localhost:3000. The landing page links to the interface preview and the in-progress product routes.
+
+Available checks: npm run lint, npm run typecheck, npm run test:e2e, and npm run build. Browser tests use Playwright; install its Chromium browser once with npx playwright install chromium. You can set PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH to use a locally installed Chromium-based browser instead.
+
+Current routes include the landing page, dashboard, discovery, local sample search, library/history states, rooms, friends/activity, settings/integration status, and account/room preview screens. Playback controls and account or room mutations are disabled until their real provider and backend phases are implemented.
+
+See the [build checklist](docs/BUILD_CHECKLIST.md) for verified project status and remaining phases.
 
 ## License
 

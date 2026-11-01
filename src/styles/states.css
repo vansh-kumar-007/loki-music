@@ -1,0 +1,202 @@
+/* Auth, loading, and error screens */
+.auth-page {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  padding: 75px 20px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 34%, rgba(9, 66, 37, 0.24), transparent 51%),
+    #050b08;
+}
+
+.auth-page::before {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(168, 227, 188, 0.016) 1px, transparent 1px), linear-gradient(90deg, rgba(168, 227, 188, 0.016) 1px, transparent 1px);
+  background-size: 66px 66px;
+  content: "";
+  mask-image: radial-gradient(ellipse at center, black, transparent 77%);
+  pointer-events: none;
+}
+
+.auth-back {
+  position: absolute;
+  top: 28px;
+  left: max(22px, calc((100vw - 1220px) / 2));
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #95a99a;
+  font-size: 11px;
+}
+
+.auth-back:hover {
+  color: var(--mint);
+}
+
+.auth-panel {
+  position: relative;
+  width: min(100%, 430px);
+  padding: 38px;
+  border: 1px solid rgba(170, 216, 181, 0.15);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(15, 35, 21, 0.88), rgba(7, 16, 10, 0.94));
+  box-shadow: 0 28px 100px rgba(0, 0, 0, 0.38);
+}
+
+.auth-brand {
+  display: inline-flex;
+  margin-bottom: 33px;
+}
+
+.auth-icon {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(137, 214, 155, 0.17);
+  border-radius: 14px;
+  background: rgba(0, 200, 117, 0.075);
+  color: #a1dcae;
+}
+
+.auth-panel h1 {
+  margin: 13px 0 0;
+  color: #e5f2e8;
+  font-family: var(--display);
+  font-size: 41px;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1.03;
+}
+
+.auth-panel h1 span {
+  color: #85d99d;
+  font-style: italic;
+}
+
+.auth-description {
+  margin: 15px 0 0;
+  color: #8b9f90;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.auth-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 11px 12px;
+  border: 1px solid rgba(166, 205, 174, 0.1);
+  border-radius: 10px;
+  background: rgba(222, 255, 231, 0.025);
+  color: #9aae9e;
+  font-size: 10px;
+}
+
+.auth-preview-button {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.auth-switch {
+  margin: 18px 0 0;
+  color: #7f9183;
+  font-size: 10px;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #a8d8b4;
+}
+
+.auth-switch a:hover {
+  color: var(--mint);
+}
+
+.auth-footer {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  left: 20px;
+  margin: 0;
+  color: #64786a;
+  font-family: var(--display);
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+}
+
+.auth-panel--not-found {
+  text-align: left;
+}
+
+.loading-screen {
+  padding: 30px 0;
+}
+
+.loading-heading,
+.loading-feature,
+.loading-card-row {
+  display: grid;
+  gap: 12px;
+}
+
+.loading-heading span,
+.loading-feature > span,
+.loading-feature i,
+.loading-card-row span {
+  display: block;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(19, 43, 27, 0.68), rgba(36, 66, 43, 0.49), rgba(19, 43, 27, 0.68));
+  background-size: 220% 100%;
+  animation: skeleton-wave 1.7s ease-in-out infinite;
+}
+
+.loading-heading span:first-child { width: 32%; height: 13px; }
+.loading-heading span:nth-child(2) { width: 48%; height: 48px; }
+.loading-heading span:nth-child(3) { width: 66%; height: 13px; }
+
+.loading-feature {
+  grid-template-columns: 1fr 0.7fr;
+  margin-top: 25px;
+}
+
+.loading-feature > span { height: 225px; }
+.loading-feature > div { display: grid; gap: 10px; align-content: center; }
+.loading-feature i { height: 33px; }
+.loading-card-row { grid-template-columns: repeat(3, 1fr); margin-top: 15px; }
+.loading-card-row span { height: 150px; }
+
+@keyframes skeleton-wave {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.app-error-state {
+  display: flex;
+  min-height: 58vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.app-error-state h2 {
+  margin: 0;
+  color: #e1eee4;
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.app-error-state > p:not(.eyebrow) {
+  max-width: 410px;
+  margin: 8px 0 18px;
+  color: #829486;
+  font-size: 11px;
+}
