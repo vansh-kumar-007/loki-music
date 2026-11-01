@@ -1,0 +1,105 @@
+# Playback Provider Feasibility
+
+**Research checked:** 2026-11-01
+**Status:** Investigation complete for this review; **no provider selected or integrated**.
+**Purpose:** Compare official, legally supportable routes for LOKI's browser-based shared listening rooms. This is a product/engineering assessment, not a legal opinion. The provider's current terms and any written approvals must be rechecked before integration.
+
+## Executive summary
+
+LOKI needs every participant to access the same track lawfully, expose enough playback state for room synchronization, and permit a room owner/DJ to coordinate multiple listeners. An API that only exposes catalog metadata is not sufficient.
+
+- **Spotify:** technically capable player, but its published policy prohibits a single-source service playing to simultaneous listeners and restricts synchronization and integrations. Development access is also capped at five allowlisted users and requires the app owner to have Premium. **Not suitable for LOKI rooms under current published rules.**
+- **SoundCloud:** technically controllable and currently free to access, but its API terms prohibit an alternative on-demand service aggregating and streaming user content from multiple uploaders unless explicitly licensed. **Not suitable for the planned aggregated room product without a written exception.**
+- **TIDAL:** official web API and Web SDK exist, but full-length playback is limited to TIDAL embeds, non-subscribers receive only short previews, and the rules prohibit non-interactive webcasting and combining TIDAL with other services. **Not suitable as-is; written approval and a viable full-length player integration would be prerequisites.**
+- **Apple MusicKit:** official web playback and catalog APIs exist. Each listener's subscription/storefront affects access. Apple's agreement prohibits synchronizing MusicKit content with other content unless its documentation permits it; whether LOKI's room synchronization fits requires written clarification. **Potentially interesting, but not approved for LOKI rooms yet.**
+- **YouTube IFrame Player:** official API can play, pause, seek, and report player state, but the video player must remain visible and functional, ads cannot be blocked, and audio extraction/background playback are prohibited. Search quota is limited. **Technically possible as synchronized video embeds, but a poor fit for a music-first custom player.**
+- **Jamendo API/Creative Commons catalog:** provides searchable streams and track-level license metadata. Native browser audio can report state and seek where the stream supports it. Non-commercial API use is allowed by Jamendo's published API terms, subject to the exact track license and attribution; commercial use requires a quote. **The clearest technical candidate for a limited initial catalog, pending owner choice and written confirmation that the room use/API plan fits Jamendo's terms.**
+- **User-owned or self-hosted rights-cleared audio:** technically offers the most control, but the product would need a rights and access model, and it does not provide a mainstream discovery catalog. **Possible fallback only for content the user is authorized to provide.**
+
+No provider is selected. The candidates and exclusions below are for review.
+
+## Comparison
+
+### Jamendo API and Creative Commons catalog
+
+- **Legal/licensing:** Jamendo's API terms state that API content is published under Creative Commons licenses. Each track's exact license governs use. The app must credit the artist and Jamendo and link each item back to its Jamendo page. API use is free for non-commercial use under the published API terms; other uses, including commercial use, require contacting Jamendo Licensing. The terms prohibit offline access and unnecessary caching and disclaim guaranteed content availability. Jamendo's API overview currently lists up to 35,000 API requests/month for non-commercial apps. Sources: [API terms](https://devportal.jamendo.com/api_terms_of_use), [track search and license fields](https://developer.jamendo.com/v3.0/tracks), [API plans](https://developer.jamendo.com/v3.0).
+- **Official API/SDK:** REST API with a developer `client_id`; no dedicated player SDK was identified. The API returns stream URLs through its track file method: [track file method](https://developer.jamendo.com/v3.0/tracks/file).
+- **Controls/state:** Use a browser audio element with the returned URL. Play/pause, position, duration, ended/error, and seek are browser-player capabilities; actual seeking depends on the returned stream and server range support and needs a spike. The room can coordinate independent browser players by sending a track reference and future target timestamp.
+- **Authentication/subscription:** Public catalog reads need a developer client ID. User OAuth is for methods that access or modify user-specific data; listeners do not need Jamendo accounts merely to read the public catalog. No listener music subscription is identified in the API docs.
+- **Geography:** Track-level rights and availability can change. Jamendo disclaims availability guarantees; do not assume every track is globally playable. Store and display the license and source link for each track.
+- **Synchronization:** Technically feasible across independent browser audio elements if every participant can access the same stream. This does not provide a shared provider session; LOKI must manage clocks, start scheduling, drift correction, and playback failures. Confirm the shared-room use case with Jamendo before production.
+- **Cost/limits:** Public API terms allow non-commercial use and reserve the right to impose request limits or fees. The developer page currently advertises up to 35,000 requests/month for non-commercial apps. Jamendo's terms say to request a quote for commercial use. Reconfirm current quotas and any hosting/streaming conditions before launch.
+- **Fit:** Best current candidate for an early limited catalog, not a substitute for a mainstream commercial catalog. Prefer tracks with licenses compatible with the intended open-source/hosted model; license filters and attribution are mandatory.
+
+### Apple MusicKit on the Web
+
+- **Legal/licensing:** Apple's current developer agreement says MusicKit content cannot be synchronized with any other content unless otherwise permitted by its documentation. LOKI's room-wide coordination and custom visual interface create an unresolved interpretation question. The agreement also says playback must be user-initiated and standard controls must work; it limits monetization of Apple Music access through MusicKit. Obtain written clarification before choosing it for rooms. Source: [Apple Developer Program License Agreement, MusicKit section](https://developer.apple.com/support/terms/apple-developer-program-license-agreement/).
+- **Official API/SDK:** MusicKit on the Web is an official hosted JavaScript library for Apple Music catalog access and in-browser playback. It uses a developer token and web user authorization: [MusicKit for Web](https://developer.apple.com/musickit/), [web getting started](https://js-cdn.music.apple.com/musickit/v3/docs/iframe.html?path=%2Fstory%2Fget-started--page).
+- **Controls/state:** The web library exposes playback controls and a player/queue. Apple's native MusicKit documentation confirms playback state and a seekable playback time, but native API documentation must not be assumed to prove identical Web SDK telemetry. Verify exact Web SDK state, clock precision, seek behavior, and events in a time-boxed spike before any architecture depends on them.
+- **Authentication/subscription:** Each listener authorizes access to their Apple Music account. Full catalog playback requires the user to have the relevant Apple Music entitlement; without it, available content is narrower. Developer token signing and Apple developer account enrollment are required. Apple's Developer Program currently lists a $99 USD yearly membership (local pricing may differ); listener subscriptions are separate and priced by market. Sources: [MusicKit](https://developer.apple.com/musickit/), [membership pricing](https://developer.apple.com/programs/whats-included/).
+- **Geography:** Apple catalog content varies by storefront; the API requires a storefront for catalog requests. Source: [Storefronts and localization](https://developer.apple.com/documentation/applemusicapi/storefronts_and_localization).
+- **Synchronization:** Technically promising if each member has the same playable catalog item and the Web SDK exposes adequate state/seek controls. No official shared-listening session API was found. The content-synchronization clause is a material legal gate; do not infer that individual subscriptions automatically permit LOKI's group model.
+- **Cost/limits:** No per-API-call fee was identified in the reviewed docs. Budget for developer membership where needed and each listener's Apple Music subscription; region-specific pricing applies. Entitlement and market gaps can prevent individual room members from playing a track.
+- **Fit:** Conditional candidate only after written terms clarification and successful browser SDK spike.
+
+### YouTube IFrame Player and Data API
+
+- **Legal/licensing:** The official embedded player must remain visible and retain standard functionality. Ads cannot be blocked; audio/video components cannot be separated; background playback is prohibited. Visible overlays for play/pause controls are permitted if they do not conflict with player controls. Sources: [YouTube IFrame API](https://developers.google.com/youtube/iframe_api_reference), [Developer Policies guide](https://developers.google.com/youtube/terms/developer-policies-guide).
+- **Official API/SDK:** The IFrame Player API supports embedding and JavaScript control. The YouTube Data API can search and inspect videos; it does not grant rights to extract or stream audio separately.
+- **Controls/state:** IFrame methods include play, pause, seek, current-time and player-state reporting. Seeking resolves around keyframes; browsers can block scripted autoplay. Source: [IFrame Player API reference](https://developers.google.com/youtube/iframe_api_reference).
+- **Authentication/subscription:** A user generally interacts with the embedded YouTube player; the API itself does not make a LOKI subscription necessary. YouTube/Google account state, age restrictions, ads, and the particular video's settings can affect playback.
+- **Geography:** Video region restrictions and embedding restrictions are per video; the API exposes region restriction and embeddable fields. Source: [Videos resource](https://developers.google.com/youtube/data/reference/rest/v3/videos).
+- **Synchronization:** LOKI could coordinate separate visible iframe players for the same video, but there is no provider-side shared session. Autoplay blocks, ads, account differences, video removal, and keyframe seeking can prevent close synchronization. A normal music-only LOKI player would violate the no-audio-separation/background rules; the embedded video must stay present.
+- **Cost/limits:** No direct per-call charge was identified in the reviewed docs; the Data API is governed by quotas. The current quota docs list 100 `search.list` calls/day and 10,000 units/day for other Data API methods by default; additional quota requires a compliance audit. Ads may play and cannot be blocked. The IFrame player's playback controls are separate from Data API search quota. Sources: [quota calculator](https://developers.google.com/youtube/data/determine_quota_cost), [quota/compliance audits](https://developers.google.com/youtube/v3/guides/quota_and_compliance_audits).
+- **Fit:** Conditional for a synchronized video-room experience, not a clean match for LOKI's audio-first interface. Search and embeddability quotas/availability need an explicit design.
+
+### TIDAL API and Web SDK
+
+- **Legal/licensing:** Playback must use an official, unmodified TIDAL Player SDK. TIDAL's guidelines prohibit non-interactive webcasting (example: one source to simultaneous listeners), integration of TIDAL content with content/streams from another service, and syncing TIDAL content with visual media. This overlaps directly with LOKI's shared-room model and separate metadata services. Sources: [TIDAL Developer Guidelines](https://developer.tidal.com/documentation/guidelines/guidelines-developer-guidelines), [Design Guidelines](https://developer.tidal.com/documentation/guidelines/guidelines-design-guidelines).
+- **Official API/SDK:** TIDAL now publishes a REST API and JavaScript/TypeScript Web SDK. The SDK has play, pause, seek, position, state, and queue methods: [Web SDK docs](https://tidal-music.github.io/tidal-sdk-web/), [player module reference](https://tidal-music.github.io/tidal-sdk-web/modules/_tidal-music_player.html).
+- **Controls/state:** Technically capable at the SDK level. However, TIDAL's design rules say full-length tracks are available only inside TIDAL Embeds and only for TIDAL subscribers; outside embeds, playbacks are limited to 30 seconds. That conflicts with a custom LOKI player and needs clarification on exact web SDK entitlement.
+- **Authentication/subscription:** OAuth 2.1 supports user authorization and PKCE. Full-length playback requires each listener to be a TIDAL subscriber. Source: [TIDAL authorization](https://developer.tidal.com/documentation/api-sdk/api-sdk-authorization).
+- **Geography:** Catalog and usage rules are country-sensitive; TIDAL may provide market-dependent alternatives, but replacements are best-effort. Source: [TIDAL API reference](https://tidal-music.github.io/tidal-api-reference/).
+- **Synchronization:** There is no shared-room API. Client-side timing is technically plausible, but current rules create serious concerns about one DJ controlling simultaneous listeners and about the separate Last.fm layer. Written TIDAL approval is required before considering this provider.
+- **Cost/limits:** Developer API pricing and production access conditions were not sufficiently clear in the reviewed public material. Listener subscriptions are separate and region-priced. Confirm production approval, playback entitlement, and price directly with TIDAL.
+- **Fit:** Not suitable as-is. Do not integrate unless TIDAL confirms the room model, full-length web player, and service-combination terms in writing.
+
+### Spotify Web Playback SDK
+
+- **Legal/licensing:** Spotify's policy prohibits a product that plays content from a single source to multiple simultaneous listeners, prohibits synchronizing sound recordings with visual media, and prohibits integrating Spotify streams/content with another service. These conflict with LOKI's DJ-led rooms, visual interface, and other planned integrations. Source: [Spotify Developer Policy](https://developer.spotify.com/policy).
+- **Official API/SDK:** Web Playback SDK is an official browser Spotify Connect player. It exposes play/pause/seek/previous/next and current playback state/position: [SDK reference](https://developer.spotify.com/documentation/web-playback-sdk/reference).
+- **Authentication/subscription:** Full streaming requires Premium for each streaming user. As of the current development-mode documentation, the app owner must have Premium, each app can have at most five authorized users, and users must be allowlisted. Extended quota is reserved for organizations meeting Spotify's criteria, including an established launched service and at least 250k monthly active users. Sources: [quota modes](https://developer.spotify.com/documentation/web-api/concepts/quota-modes), [February 2026 migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide).
+- **Geography:** Availability depends on each user's account market; a track may be unplayable for one participant. Source: [Track relinking](https://developer.spotify.com/documentation/web-api/concepts/track-relinking).
+- **Synchronization:** Technically strong state/seek controls, but published policy conflicts with LOKI's simultaneous room use. Its APIs do not override those terms.
+- **Cost/limits:** Each listener needs a paid Premium plan, with price varying by market. Development mode is unsuitable for public rollout; extended access requires review and significant organizational eligibility.
+- **Fit:** Not suitable for LOKI's synchronized shared-room feature under published rules; no integration recommended without written Spotify permission changing this conclusion.
+
+### SoundCloud API and Widget
+
+- **Legal/licensing:** SoundCloud's API terms prohibit creating an alternative digital content service that aggregates and streams User Content from multiple uploaders into an on-demand listening service unless the acts are explicitly licensed. LOKI's shared catalog/queue is close to that prohibited shape. SoundCloud also states the API does not give the app rights to User Content and requires uploader/source attribution and a direct backlink. Source: [SoundCloud API Terms](https://developers.soundcloud.com/docs/api/terms-of-use).
+- **Official API/SDK:** OAuth 2.1/PKCE, stream endpoints for eligible tracks, and an official HTML5 Widget API are documented: [API guide](https://developers.soundcloud.com/docs/api/guide), [Widget API](https://developers.soundcloud.com/docs/api/html5-widget.Copyright).
+- **Controls/state:** Widget events include play, pause, finish, seek, and position/progress; custom stream URLs can be played by an HTML audio element for tracks that allow it.
+- **Authentication/subscription:** Public tracks may stream without a user session; private tracks require authorization and a creator-provided secret token. No SoundCloud subscription is established as a general public-track requirement.
+- **Geography:** Creator settings, paywalls, and territorial/geo blocking determine availability. SoundCloud documents `playable`, `preview`, and `blocked` states.
+- **Synchronization:** Technically plausible with independent players, but the central legal issue is the on-demand aggregation/use model, not missing controls.
+- **Cost/limits:** SoundCloud says API access is currently free but reserves the right to charge. Current docs limit stream endpoint requests to 1,500 per 24 hours, with higher production access by approval. Sources: [API terms](https://developers.soundcloud.com/docs/api/terms-of-use), [rate limits](https://developers.soundcloud.com/docs/api/rate-limits.html).
+- **Fit:** Not suitable for the planned aggregated room service unless SoundCloud grants a written license/exception and confirms the user-generated-content model.
+
+### User-owned or self-hosted rights-cleared audio
+
+- **Legal/licensing:** Only files/URLs for which the user or host has playback and room-sharing rights can be used. User-provided URLs are not proof of permission. Rights must cover streaming to room participants, not just local personal playback.
+- **Official API/SDK:** No general catalog/provider API. The source is supplied by the user or by LOKI's host.
+- **Controls/state:** Browser media controls expose play/pause, seek, current time, duration, and errors when the media source permits it. Room sync is technically under LOKI's control.
+- **Authentication/subscription:** Depends on source. Signed URLs, source accounts, or self-hosted identity may be required. Every participant must have legal and technical access.
+- **Geography:** Inherits the source's availability, territorial rights, and URL expiry behavior.
+- **Synchronization:** Technically the most controllable option if every room member can access the same version of the same file. It does not solve common-track discovery, matching, or rights verification.
+- **Cost/limits:** No catalog API fee, but storage, bandwidth, transcoding, and egress may cost money if LOKI hosts media. Hosting or relaying copyrighted streams without proper rights is out of scope.
+- **Fit:** Possible fallback for verified user-owned/cleared media; not a ready-made general music provider.
+
+## Recommendation for the decision gate
+
+Do not select a commercial catalog provider from API feature lists alone. Before approval, request written clarification from any provider whose published rules leave room for interpretation.
+
+For a narrow technical spike after owner approval, Jamendo is the clearest candidate because it exposes a direct stream API and track license metadata. The spike should verify (1) Jamendo's acceptance of LOKI's private shared-room pattern, (2) exact stream seek/range behavior, (3) per-track license attribution and filtering, (4) current non-commercial quota, and (5) treatment of any hosted public instance. This is a recommendation for what to evaluate, **not a provider selection**.
+
+The first release must not advertise synchronized commercial-catalog playback until the selected provider's terms and SDK support the exact room model. If no reviewed provider supports that model, present that as a product constraint for owner decision rather than simulating synchronization.
